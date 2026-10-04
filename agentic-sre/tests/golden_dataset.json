@@ -1,0 +1,23 @@
+[
+  {
+    "test_id": "test_oomkilled_payment",
+    "raw_logs": "2026-03-29T10:14:22Z pod/payment-service-7f89d98b6-x4k21 container/payment-app Kernel log: Memory cgroup out of memory: Kill process 18291 (python) score 950 or sacrifice child State: Terminated, ExitCode: 137, Reason: OOMKilled",
+    "expected_service": "payment-service",
+    "expected_severity": "HIGH",
+    "key_root_cause_terms": ["memory", "limit", "OOMKilled", "cgroup"]
+  },
+  {
+    "test_id": "test_postgres_pool_exhaustion",
+    "raw_logs": "2026-03-29T11:02:15Z [ERROR] [auth-service] django.db.utils.OperationalError: FATAL: remaining connection slots are reserved for non-replication superuser connections. pool_size=100 active_connections=100 timeout=30s",
+    "expected_service": "auth-service",
+    "expected_severity": "HIGH",
+    "key_root_cause_terms": ["connection pool", "exhausted", "database", "max_connections"]
+  },
+  {
+    "test_id": "test_azure_vnet_timeout",
+    "raw_logs": "2026-03-29T12:45:00Z order-processor-vnet-gateway [WARN] Connection timed out after 30000ms trying to reach 10.240.0.5:443. Route path blocked or NSG rule dropping packets.",
+    "expected_service": "order-processor",
+    "expected_severity": "HIGH",
+    "key_root_cause_terms": ["network", "timeout", "NSG", "firewall", "VNet"]
+  }
+]
