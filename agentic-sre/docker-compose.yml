@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   qdrant:
     image: qdrant/qdrant:latest
@@ -11,6 +9,14 @@ services:
       - qdrant_storage:/qdrant/storage
     restart: always
 
+  phoenix:
+    image: arizephoenix/phoenix:latest
+    container_name: sre-phoenix
+    ports:
+      - "6006:6006" # UI Dashboard
+      - "4317:4317" # OpenTelemetry gRPC Collector
+    restart: always
+
   sre-copilot-api:
     build: .
     container_name: sre-copilot-api
@@ -18,11 +24,12 @@ services:
       - "8000:8000"
     environment:
       - QDRANT_URL=http://qdrant:6333
+      - PHOENIX_COLLECTOR_ENDPOINT=http://phoenix:4317
       - OPENAI_API_KEY=${OPENAI_API_KEY}
     depends_on:
       - qdrant
+      - phoenix
     restart: unless-stopped
 
 volumes:
   qdrant_storage:
-  
