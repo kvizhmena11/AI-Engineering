@@ -10,6 +10,7 @@ from src.schemas import AgentState, LogSignature, RemediationPlan
 
 load_dotenv()
 
+qdrant_url = os.getenv("QDRANT_URL")
 QDRANT_HOST = os.getenv("QDRANT_HOST", "localhost")
 QDRANT_PORT = int(os.getenv("QDRANT_PORT", 6333))
 COLLECTION_NAME = os.getenv("COLLECTION_NAME", "sre_runbooks")
@@ -17,7 +18,12 @@ COLLECTION_NAME = os.getenv("COLLECTION_NAME", "sre_runbooks")
 # Initialize LLM & Embeddings
 llm = ChatOpenAI(model="gpt-4o-mini", temperature=0)
 embeddings = OpenAIEmbeddings(model="text-embedding-3-small")
-qdrant_client = QdrantClient(host=QDRANT_HOST, port=QDRANT_PORT)
+
+# Prefer QDRANT_URL if present (Docker Compose environment), otherwise fall back to HOST/PORT (local machine)
+if qdrant_url:
+    qdrant_client = QdrantClient(url=qdrant_url)
+else:
+    qdrant_client = QdrantClient(host=QDRANT_HOST, port=QDRANT_PORT)
 
 # --- Node 1: Diagnostic Agent ---
 def diagnostic_node(state: AgentState) -> Dict[str, Any]:
