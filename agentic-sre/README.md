@@ -81,6 +81,6 @@ The incident pipeline operates as a directed acyclic graph (DAG):
 Clone the repository and create a `.env` file in the root directory:
 
 ```bash
-git clone [https://github.com/your-username/agentic-sre.git](https://github.com/your-username/agentic-sre.git)
+git clone [https://github.com/your-username/agentic-sre.git]
 cd agentic-sre
 echo "OPENAI_API_KEY=your_openai_api_key_here" > .env
